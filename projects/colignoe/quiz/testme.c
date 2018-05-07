@@ -5,14 +5,33 @@
 
 char inputChar()
 {
-    // TODO: rewrite this function
-    return ' ';
+    // generate random character between ASCII numbers 32..126
+    char c = (rand() % 94) + 32;
+    return c;
 }
 
 char *inputString()
 {
-    // TODO: rewrite this function
-    return "";
+    // determine length between 1 and 30 characters
+    int length = (rand() % 29) + 1;
+
+    char output[30];
+    int i;
+
+    // fill output with null characters
+    for (i = 0; i < 30; i++)
+    {
+      output[i] = '\0';
+    }
+
+    // now, fill output with random characters from ASCII 32..126
+    for (i = 0; i < length; i++)
+    {
+      output[i] = (rand() % 94) + 32;
+    }
+
+    return output;
+
 }
 
 void testme()
