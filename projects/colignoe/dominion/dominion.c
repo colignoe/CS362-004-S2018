@@ -1343,6 +1343,8 @@ int adventurerEffect(int drawntreasure, int currentPlayer, struct gameState *sta
   int temphand[MAX_HAND];
 
 
+
+
   // while(drawntreasure<2)
   while(drawntreasure<4) // FIXME bug introduced
   {
@@ -1526,7 +1528,7 @@ int outpostEffect(struct gameState *state, int handPos, int currentPlayer)
 {
   //set outpost flag
   // state->outpostPlayed++;
-  state->outpostPlayed += 2; // FIXME introduced bug
+  state->outpostPlayed += 2; // FIXME introduced bug += 2
 
   //discard card
   discardCard(handPos, currentPlayer, state, 0);

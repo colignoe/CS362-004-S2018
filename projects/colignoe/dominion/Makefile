@@ -38,29 +38,21 @@ all: playdom player
 ##################################################################
 # Unit Tests
 ##################################################################
-#unittest1
 unittest1: dominion.o unittest1.c
 	gcc -o unittest1 unittest1.c -g dominion.o rngs.o $(CFLAGS)
-#unittest2
 unittest2: dominion.o unittest2.c
 	gcc -o unittest2 unittest2.c -g dominion.o rngs.o $(CFLAGS)
-#unittest3
 unittest3: dominion.o unittest3.c
 	gcc -o unittest3 unittest3.c -g dominion.o rngs.o $(CFLAGS)
-#unittest4
 unittest4: dominion.o unittest4.c
 	gcc -o unittest4 unittest4.c -g dominion.o rngs.o $(CFLAGS)
 
-#cardtest1
 cardtest1: dominion.o cardtest1.c
 	gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o $(CFLAGS)
-#cardtest2
 cardtest2: dominion.o cardtest2.c
 	gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o $(CFLAGS)
-#cardtest3
 cardtest3: dominion.o cardtest3.c
 	gcc -o cardtest3 cardtest3.c -g dominion.o rngs.o $(CFLAGS)
-#cardtest4
 cardtest4: dominion.o cardtest4.c
 	gcc -o cardtest4 cardtest4.c -g dominion.o rngs.o $(CFLAGS)
 
@@ -76,12 +68,29 @@ unittestresults.out: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2
 	gcov dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 
-
-
 ##################################################################
+# Random Tests
+##################################################################
+randomtestcard1: dominion.o randomtestcard1.c
+	gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o $(CFLAGS)
+	./randomtestcard1 &> randomtestcard1.out
+	gcov dominion.c >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
 
+randomtestcard2: dominion.o randomtestcard2.c
+	gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o $(CFLAGS)
+	./randomtestcard2 &> randomtestcard2.out
+	gcov dominion.c >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
 
-# unittestresults.out:
+randomtestadventurer: dominion.o randomtestadventurer.c
+	gcc -o randomtestadventurer randomtestadventurer.c -g dominion.o rngs.o $(CFLAGS)
+	./randomtestadventurer &> randomtestadventurer.out
+	gcov dominion.c >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
+
+# randomtest2:
+# randomtestadventurer:
 
 
 clean:
