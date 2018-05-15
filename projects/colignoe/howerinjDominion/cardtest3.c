@@ -1,40 +1,71 @@
-/***************************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
-** Filename: cardtest3.c
-** Description: Card test 2 - 
-**  test the village card
-*****************************/
+/*
+** cardtest3.c
+**
+** tests implementation of outpost card
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
-#include "rngs.h"
-#include <stdlib.h>
 
-int main (int argc, char** argv) {
+int faults = 0; // track number of faults
 
-	int seed = 1000;
-	int numPlayers = 2;
-	struct gameState G;
-	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-			gardens, tribute, smithy, council_room};
-	int flag;
-	int choice1 = 0, choice2 = 0, choice3 = 0;
-	printf("Card test 3 - Village Card\n");
-	// initialize game state
-	initializeGame(numPlayers, k, seed, &G);
-	flag = G.numActions;
-	cardEffect(village, choice1, choice2, choice3, &G, 0, NULL);
-	//make sure 2 actions are incremented
-	if(G.numActions == flag + 2)
-		printf("Village Card test passed\n");
-	else {
-		printf("Village Card test failed\n");
-		printf("The number of actions incremented is incorrect\n");
-	}
+void assertTrue(int a, int b)
+{
+  if (a == b)
+  {
+    printf("TEST PASSED\n");
+  }
+  else
+  {
+    printf("TEST FAILURE\n");
+    faults++;
+  }
 
-	return 0;
+}
+
+int main()
+{
+  int seed = 1000;
+  int numPlayers = 2;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+  int result; // stores return value of function during testing
+
+  // init game
+  initializeGame(numPlayers, k, seed, &G);
+
+  printf("-----------TESTING outpost:---------------\n");
+
+  // preconditions
+  int preOutpostPlayed = G.outpostPlayed; // should increment by 1
+  int preNumCards = numHandCards(&G); // should decrememnt by 1
+  int preNumActions = G.numActions; // should decrememnt by 1
+
+  // play outpost card
+  G.hand[0][0] = outpost;
+  result = playCard(0, 0, 0, 0, &G);
+
+  // result should be 0
+  assertTrue(result, 0);
+
+  assertTrue(numHandCards(&G), preNumCards - 1);
+  assertTrue(G.numActions, preNumActions - 1);
+  assertTrue(G.outpostPlayed, preOutpostPlayed + 1);
+
+
+  // Test complete
+  if (faults > 0)
+  {
+    printf("\nTEST FAILED\n");
+  }
+  else
+  {
+    printf("\nTEST SUCCESSFULLY COMPLETED\n");
+  }
+
+
 }

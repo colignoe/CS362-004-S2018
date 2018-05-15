@@ -1,46 +1,100 @@
-/********************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
-** Filename: unittest2.c
-** Description: Unit test 2-
-**  isGameOver function test
-*********************/
+/*
+** unittest2.c
+**
+** Tests function isGameOver(struct gameState *state)
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
-#include "rngs.h"
-#include <stdlib.h>
+// #include <assert.h>
 
-int main(int argc, char** argv){
-	int seed=1000;
-	int numPlayers = 2;
-	struct gameState G;
-	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse, gardens, tribute, smithy, council_room};
-	int count = 0;
-	// initialize game state
-	initializeGame(numPlayers, k, seed, &G);
 
-	printf("Test isGameOver function\n");
-	// the game is over if the province card supply count is zero
-	G.supplyCount[province] = 0;
-	count = isGameOver(&G);
-	if(count == 1)
-		printf("The Game is over - test 1 passed\n");
-	else 
-		printf("The game is not over -- test 1 failed\n");
+int faults = 0; // track number of faults
 
-	// the game is over if 3 supply counts are zero so we'll set three supply counts to zero
-	G.supplyCount[1] = 0;
-	G.supplyCount[2] = 0;
-	G.supplyCount[3] = 0;
-	count = isGameOver(&G);
-	if(count == 1)
-		printf("The game is over - test 2 passed\n");
-	else
-		printf("The game is not over - test 2 failed\n");
+void assertTrue(int a, int b)
+{
+  if (a == b)
+  {
+    printf("TEST PASSED\n");
+  }
+  else
+  {
+    printf("TEST FAILURE\n");
+    faults++;
+  }
 
-	return 0;
+}
+
+
+
+int main(void)
+{
+
+  int seed = 1000;
+  int numPlayers = 2;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+  int result; // stores return value of function during testing
+
+  // init game
+  initializeGame(numPlayers, k, seed, &G);
+
+  printf("-----------TESTING isGameOver():---------------\n");
+
+  // TODO choose input data
+  // TODO expected outcome:
+  // TODO run function against input
+  // TODO examine results
+
+
+
+  // input: set stack of province cards to empty (game ends - should return 1)
+  printf("Test: stack of province cards is empty -> ");
+  G.supplyCount[province] = 0;
+  result = isGameOver(&G);
+  assertTrue(result, 1);
+
+
+  // input: stack of province cards not empty (should return 0)
+  printf("Test: stack of province cards is not empty -> ");
+  G.supplyCount[province] = 1;
+  result = isGameOver(&G);
+  assertTrue(result, 0);
+
+  // input: set 3 supply piles to empty (game ends - should return 1)
+  printf("Test: 3 supply piles are empty -> ");
+  G.supplyCount[0] = 0;
+  G.supplyCount[1] = 0;
+  G.supplyCount[2] = 0;
+  result = isGameOver(&G);
+  assertTrue(result, 1);
+
+  // input: all supply piles are not empty (should return 0)
+  printf("Test: all supply piles have cards -> ");
+  int i;
+  for (i = 0; i < 25; i++)
+  {
+    G.supplyCount[i] = 1;
+  }
+  result = isGameOver(&G);
+  assertTrue(result, 0);
+
+
+  if (faults > 0)
+  {
+    printf("\nTEST FAILED\n");
+  }
+  else
+  {
+    printf("\nTEST SUCCESSFULLY COMPLETED\n");
+  }
+
+
+
+
+
+
 }

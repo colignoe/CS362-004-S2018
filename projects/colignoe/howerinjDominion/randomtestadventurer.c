@@ -1,69 +1,127 @@
-/***************************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
+/*********************************************************************
 ** Filename: randomtestadventurer.c
-** Description: randomize variables
-** for adventurer function
-*****************************/
+**   Author: Evin Colignon
+**     Date: 5/13/18
+** Overview:
+**    Input:
+**   Output:
+*********************************************************************/
+
+
+
+// include libraries
+// include necessary dominion files
+#include <time.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
-#include <string.h>
-#include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
-#include <stdlib.h>
 
-#define NO_TESTS 1000
 
-int main (int argc, char** argv) {
-	
-	int seed = rand();
-	int preTotalCards = 0;
-	int postTotalCards = 0;
-	int passed = 0;
-	int failed = 0;
-	
-	printf("Adventurer Card - Random Testing\n");
+int checkAdventurer(int p, struct gameState *post);
 
-	for (int i = 0; i < NO_TESTS; i++) {
-		int numPlayers = rand()%3 + 2;
-		int player = rand() % (numPlayers + 1);
-		int handPos = rand()%  4;
-		int choice1 = rand()%2;
-		int choice2 = rand()%2;
-		int choice3 = rand()%2;
-		struct gameState G;
-		int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-				gardens, tribute, smithy, council_room};
 
-		// initialize game state
-		initializeGame(numPlayers, k, seed, &G);
-		
-		//Get card numbers
-		G.deckCount[player] = rand() % MAX_DECK;
-		G.discardCount[player] = rand() % MAX_DECK;
-		G.handCount[player] = rand() % MAX_DECK;
-		preTotalCards = G.deckCount[player] + G.discardCount[player] + G.handCount[player];
+// Identify the interface to test - what should cardEffect do?
+// adventurer
+// invoke cardEffect - cardEffectFails
+int cardEffectFails = 0;
+// if deck empty need to shuffle discard and add to deck - shuffleFails
+int shuffleFails = 0;
+// card needs to be drawn - drawCardFails
+int drawCardFails = 0;
+// drawn treasure increases if copper silver or gold - treasureFails
+int treasureFails = 0;
+// handCount decreases - handCountFails
+int handCountFails = 0;
+// total fails
+int totalFails;
 
-		int flag = cardEffect(adventurer, choice1, choice2, choice3, &G, handPos, NULL);
-		if(flag == 0){
-			// printf("Adventurer Card test passed\n");
-			postTotalCards = G.deckCount[player] + G.discardCount[player] + G.handCount[player];
-			if(preTotalCards == postTotalCards){
-				//the card counts after calling adventurer card are good
-				passed = passed + 1;
-			}
-		}
-		else {
-			// printf("Adventurer test passed\n");
-			failed = failed + 1;
-		}
-	}
-	printf("The Adventurer card is called and various card plays occur\n");
-	printf("The overall card count should be the same after the Adventurer card is played. \n");
-	printf("This test will check that we haven accurate overall card count\n");
-	printf("The Adventurer card passed %d tests\n", passed);
-	printf("The Adventurer card failed %d tests\n", failed);
-	return 0;
+
+
+
+
+int main()
+{
+  // TODO Write code to generate random inputs: use code to randomly set
+  // gamestate within reasonable boundaries (values code is expected to handle).
+  // Hard code some boundary cases if needed
+  printf("-----------testing randomtestadventurer.c-----------\n");
+  printf("--------------testing adventurer card-------------\n");
+
+  int i, n, p;
+  int seed = 1000;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+
+  int numPlayers = floor(Random() * MAX_PLAYERS);
+
+  // seed rand() function
+  srand(time(NULL));
+
+  for (n = 0; n < 2000; n++)
+  {
+    for (i = 0; i < sizeof(struct gameState); i++)
+    {
+      ((char*)&G)[i] = floor(Random() * 256);
+    }
+
+    // init game
+    // initializeGame(numPlayers, k, seed, &G);
+
+
+    // shift probability space: randomly select values within appropriate range
+    p = floor(Random() * MAX_PLAYERS); // player
+    G.numPlayers = floor(Random()* MAX_PLAYERS);
+    G.deckCount[p] = floor(Random() * MAX_DECK); // deckCount
+    G.discardCount[p] = floor(Random() * MAX_DECK); // discardCount
+    G.handCount[p] = floor(Random() * MAX_HAND); // handcount
+    G.playedCardCount = floor(Random() * MAX_DECK);
+    G.whoseTurn = p;
+
+
+    checkAdventurer(p, &G);
+  }
+
+  printf("ALL TESTS OK\n");
+
+
+
+  return 0;
+
+}
+
+
+
+
+// TODO Write code to check behavior on random inputs: use code to copy
+// gamestate beforehand to "pre" variable, manually change the values as
+// they are expected to change, then compare the values
+int checkAdventurer(int p, struct gameState *post)
+{
+  struct gameState pre;
+  memcpy (&pre, post, sizeof(struct gameState));
+
+  int bonus = 0;
+  int result = 0;
+  // int s;
+
+  // call the card cardEffect
+  result = cardEffect(adventurer,0,0,0,post,0, &bonus);
+
+  if (result != 0)
+  {
+    cardEffectFails++;
+  }
+
+
+  // TODO change pre manually
+  // TODO compare to post
+
+
+  return 0;
+
 }

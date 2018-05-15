@@ -1,97 +1,80 @@
-/***************************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
-** Filename: unittest4.c
-** Description: Unit test 4 - 
-**  getCost function test
-*****************************/
+/*
+** unittest4.c
+**
+** Tests function int supplyCount(int card, struct gameState *state)
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
-#include "rngs.h"
-#include <stdlib.h>
 
-int main() {
-	int seed = 1000;
-	int numPlayers = 2;
-	struct gameState G;
-	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-			gardens, tribute, smithy, council_room};
-	int cost = 0;
-	// initialize game state
-	initializeGame(numPlayers, k, seed, &G);
 
-	printf ("Test getCost function.\n");
-	cost = getCost(adventurer);
-	// The adventurer should return 6
-	if(cost == 6)
-		printf("getCost function test passed\n");
-	else	
-		printf("getCost function test failed\n");
-	//test with smithy - should return 4
-	cost = getCost(smithy);
-	if(cost == 4)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with embargo - should return 2
-	cost = getCost(embargo);
-	if(cost == 2)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with village- should return 3
-	cost = getCost(village);
-	if(cost == 3)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with minion - should return 5
-	cost = getCost(minion);
-	if(cost == 5)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with mine - should return 5
-	cost = getCost(mine);
-	if(cost == 5)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with cutpurse - should return 4
-	cost = getCost(cutpurse);
-	if(cost == 4)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with gardens - should return 4
-	cost = getCost(gardens);
-	if(cost == 4)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with tribute - should return 5
-	cost = getCost(tribute);
-	if(cost == 5)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	//test with council_room - should return 5
-	cost = getCost(council_room);
-	if(cost == 5)
-		printf("getCost function test passed\n");
-	else
-		printf("getCost function test failed\n");
-	// test with invalid cost and should return -1
-	int flag = 99;
-	cost = getCost(flag);
-	if(cost == -1)
-		printf("getCost function test passed\n");
-	else	
-		printf("getCost function test failed\n");
-	
-	return 0;
+int faults = 0; // track number of faults
+
+void assertTrue(int a, int b)
+{
+  if (a == b)
+  {
+    printf("TEST PASSED\n");
+  }
+  else
+  {
+    printf("TEST FAILURE\n");
+    faults++;
+  }
+
+}
+
+
+int main()
+{
+  int seed = 1000;
+  int numPlayers = 2;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+  // int result; // stores return value of function during testing
+
+  // init game
+  initializeGame(numPlayers, k, seed, &G);
+
+printf("-----------TESTING supplyCount():---------------\n");
+
+
+  // set supply of each card to 0
+  int i;
+  for (i = 0; i < treasure_map; i++)
+  {
+    G.supplyCount[i] = 0;
+  }
+
+  // pick 3 cards and assert they are 0
+  assertTrue(supplyCount(gold, &G), 0);
+  assertTrue(supplyCount(embargo, &G), 0);
+  assertTrue(supplyCount(outpost, &G), 0);
+
+  // set supply of each card to 10
+  for (i = 0; i < treasure_map; i++)
+  {
+    G.supplyCount[i] = 10;
+  }
+
+  // assert they all return 10
+  assertTrue(supplyCount(gold, &G), 10);
+  assertTrue(supplyCount(embargo, &G), 10);
+  assertTrue(supplyCount(outpost, &G), 10);
+
+
+  // Test complete
+  if (faults > 0)
+  {
+    printf("\nTEST FAILED\n");
+  }
+  else
+  {
+    printf("\nTEST SUCCESSFULLY COMPLETED\n");
+  }
+
 }

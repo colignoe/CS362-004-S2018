@@ -1,36 +1,66 @@
-/***************************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
-** Filename: cardtest1.c
-** Description: Card test 1 - 
-**  test the adventurer card
-*****************************/
+/*
+** cardtest1.c
+**
+** tests play of adventurer card
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
-#include "rngs.h"
-#include <stdlib.h>
 
-int main (int argc, char** argv) {
 
-	int seed = 1000;
-	int numPlayers = 2;
-	struct gameState G;
-	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-			gardens, tribute, smithy, council_room};
+int faults = 0; // track number of faults
 
-	// initialize game state
-	initializeGame(numPlayers, k, seed, &G);
-	printf("Card Test 1 - Adventurer Card\n");
-	int choice1 = 0, choice2 = 0, choice3 = 0;
-	int flag = cardEffect(adventurer, choice1, choice2, choice3, &G, 0, NULL);
-	if(flag == 0)
-		printf("Adventurer Card test passed\n");
-	else 
-		printf("Adventurer test passed\n");
+void assertTrue(int a, int b)
+{
+  if (a == b)
+  {
+    printf("TEST PASSED\n");
+  }
+  else
+  {
+    printf("TEST FAILURE\n");
+    faults++;
+  }
 
-	return 0;
+}
+
+int main()
+{
+  int seed = 1000;
+  int numPlayers = 2;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+  int result; // stores return value of function during testing
+
+  // init game
+  initializeGame(numPlayers, k, seed, &G);
+
+
+  printf("-----------TESTING adventurer:---------------\n");
+
+
+  // play adventurer card
+  G.hand[0][0] = adventurer;
+  result = playCard(0, 0, 0, 0, &G);
+
+
+
+
+
+
+  // Test complete
+  if (faults > 0)
+  {
+    printf("\nTEST FAILED\n");
+  }
+  else
+  {
+    printf("\nTEST SUCCESSFULLY COMPLETED\n");
+  }
+
+
 }

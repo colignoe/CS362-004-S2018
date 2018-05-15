@@ -1,40 +1,71 @@
-/***************************
-** Jake Howering
-** CS 362 @ Oregon State U
-** Spring 2018
-** Filename: cardtest2.c
-** Description: Card test 2 - 
-**  test the smithy card
-*****************************/
+/*
+** cardtest2.c
+**
+** tests implementation of smithy card
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
-#include "rngs.h"
-#include <stdlib.h>
 
-int main (int argc, char** argv) {
+int faults = 0; // track number of faults
 
-	int seed = 1000;
-	int numPlayers = 2;
-	struct gameState G;
-	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-			gardens, tribute, smithy, council_room};
-	int flag;
-	int choice1 = 0, choice2 = 0, choice3 = 0;
-	printf("Card Test 2 - Smithy Card\n");
-	// initialize game state
-	initializeGame(numPlayers, k, seed, &G);
-	flag = numHandCards(&G);
-	cardEffect(smithy, choice1, choice2, choice3, &G, 0, NULL);
-	//make sure 3 cards were drawn
-	if(numHandCards(&G) == flag + 2)
-		printf("Smith Card test passed\n");
-	else {
-		printf("Smithy Card test failed\n");
-		printf("The number of cards drawn is incorrect\n");
-	}
+void assertTrue(int a, int b)
+{
+  if (a == b)
+  {
+    printf("TEST PASSED\n");
+  }
+  else
+  {
+    printf("TEST FAILURE\n");
+    faults++;
+  }
 
-	return 0;
+}
+
+int main()
+{
+  int seed = 1000;
+  int numPlayers = 2;
+  int k[10] = {adventurer, council_room, feast, gardens, mine,
+              remodel, smithy, village, baron, great_hall};
+  struct gameState G;
+  int result; // stores return value of function during testing
+
+
+  // init game
+  initializeGame(numPlayers, k, seed, &G);
+
+  printf("-----------TESTING smithy():---------------\n");
+
+
+  int preNumCards = numHandCards(&G); // should increment by 2
+  int preNumActions = G.numActions; // should decrememnt by 1
+
+  // play smithy card
+  G.hand[0][0] = smithy;
+  result = playCard(0, 0, 0, 0, &G);
+
+  // test that result = 0
+  assertTrue(result, 0);
+
+  assertTrue(numHandCards(&G), preNumCards + 2);
+  assertTrue(G.numActions, preNumActions - 1);
+
+
+
+  // Test complete
+  if (faults > 0)
+  {
+    printf("\nTEST FAILED\n");
+  }
+  else
+  {
+    printf("\nTEST SUCCESSFULLY COMPLETED\n");
+  }
+
+
 }
