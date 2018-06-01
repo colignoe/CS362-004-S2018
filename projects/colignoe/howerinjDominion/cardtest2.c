@@ -50,10 +50,17 @@ int main()
   result = playCard(0, 0, 0, 0, &G);
 
   // test that result = 0
+  printf("playCard should return 0: ");
   assertTrue(result, 0);
+  printf("\n");
 
+  printf("numHandCards should incrememnt by 2: ");
   assertTrue(numHandCards(&G), preNumCards + 2);
+  printf("\n");
+
+  printf("numActions should decrement by 1: ");
   assertTrue(G.numActions, preNumActions - 1);
+  printf("\n");
 
 
 

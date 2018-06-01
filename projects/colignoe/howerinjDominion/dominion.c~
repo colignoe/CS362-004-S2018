@@ -1311,7 +1311,7 @@ int smithyCard(int i, int currentPlayer, struct gameState *state, int handPos ) 
       //+3 Cards
       // The for loop has an error.  The i should start at zero, not two
       // This error was introduced as part of HW2
-      for (i = 0; i < 3; i++)
+      for (i = 2; i < 3; i++)
 	{
 	  drawCard(currentPlayer, state);
 	}
@@ -1328,7 +1328,7 @@ int villageCard(struct gameState *state, int handPos, int currentPlayer){
       //+2 Actions
       // The below line has been modified to introduce an error
       // It should be a +2
-      state->numActions = state->numActions + 2;
+      state->numActions = state->numActions + 1;
 			
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);

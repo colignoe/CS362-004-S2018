@@ -56,9 +56,17 @@ int main()
 
   // postconditions
   // result should be 0
+  printf("playCard should return 0: ");
   assertTrue(result, 0);
+  printf("\n");
+
+  printf("numHandCards should stay the same: ");
   assertTrue(numHandCards(&G), preNumCards);
+  printf("\n");
+
+  printf("Number of actions should increment by 1: ");
   assertTrue(G.numActions, preNumActions + 1);
+  printf("\n");
 
 
   // Test complete
